@@ -2,7 +2,7 @@ import React, { Component } from "react";
 //import axios from "axios";
 import "./Blog.css";
 import Posts from "./Posts/Posts";
-import { Route, NavLink } from "react-router-dom";
+import { Route, NavLink, Switch, Redirect } from "react-router-dom";
 import NewPost from "./NewPost/NewPost.js";
 //import { Link } from "react-router-relative-link";
 import FullPost from "./FullPost/FullPost.js";
@@ -16,7 +16,7 @@ class Blog extends Component {
             <ul>
               <li>
                 <NavLink
-                  to="/"
+                  to="/posts"
                   //assign the classname from css
                   activeClassName="my-active"
                   //Inline Styling
@@ -45,9 +45,12 @@ class Blog extends Component {
           </nav>
         </header>
         {/*<Route path="/" exact render={() => <h1> home </h1>} />*/}
-        <Route path="/" exact component={Posts} />
-        <Route path="/new-post" component={NewPost} />
-        <Route path="/:id" component={FullPost} />
+        {/*Switch execute only first match URL*/}
+        <Switch>
+          <Route path="/new-post" component={NewPost} />
+          <Route path="/posts" component={Posts} />
+          <Redirect from="/" to="/posts" />
+        </Switch>
       </div>
     );
   }

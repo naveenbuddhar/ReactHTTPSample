@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import axios from "axios";
 import "./NewPost.css";
+import { Redirect } from "react-router-dom";
 
 class NewPost extends Component {
   state = {
     title: "",
     content: "",
-    author: "Max"
+    author: "Max",
+    submitted: false
   };
 
   componentDidMount() {
@@ -19,13 +21,24 @@ class NewPost extends Component {
       author: this.state.author
     };
     axios.post("posts", data).then(response => {
-      return console.log(response);
+      console.log(response);
+      //this.setState({ submitted: true });
+      //Push to the new after handling the submit
+      //this.props.history.push("/posts");
+      // similarly we can also use the replace and it
+      //will complete replace the previous url
+      this.props.history.replace("/posts");
     });
   };
 
   render() {
+    let redirect = null;
+    if (this.state.submitted) {
+      redirect = <Redirect to="/posts" />;
+    }
     return (
       <div className="NewPost">
+        {redirect}
         <h1>Add a Post</h1>
         <label>Title</label>
         <input
