@@ -3,11 +3,19 @@ import React, { Component } from "react";
 import "./Blog.css";
 import Posts from "./Posts/Posts";
 import { Route, NavLink, Switch, Redirect } from "react-router-dom";
-import NewPost from "./NewPost/NewPost.js";
+//import NewPost from "./NewPost/NewPost.js";
 //import { Link } from "react-router-relative-link";
 import FullPost from "./FullPost/FullPost.js";
+import AsyncComponent from "../../hoc/asyncComponent.js";
+
+const AsyncNewPost = AsyncComponent(() => {
+  return import("./NewPost/NewPost.js");
+});
 
 class Blog extends Component {
+  state = {
+    auth: true
+  };
   render() {
     return (
       <div className="Blog">
@@ -47,9 +55,13 @@ class Blog extends Component {
         {/*<Route path="/" exact render={() => <h1> home </h1>} />*/}
         {/*Switch execute only first match URL*/}
         <Switch>
-          <Route path="/new-post" component={NewPost} />
+          {this.state.auth ? (
+            <Route path="/new-post" component={AsyncNewPost} />
+          ) : null}
+
           <Route path="/posts" component={Posts} />
-          <Redirect from="/" to="/posts" />
+          {/*<Redirect from="/" to="/posts" />*/}
+          <Route render={() => <h1> Page Not found</h1>} />
         </Switch>
       </div>
     );
